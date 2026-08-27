@@ -1,0 +1,9 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Starbound Item Pose Editor",
+  "version": "0.1.0",
+  "identifier": "com.starbound.itemposeeditor",
+  "build": { "frontendDist": "../src" },
+  "app": { "withGlobalTauri": true, "windows": [{ "title": "Starbound Item Pose Editor", "width": 1220, "height": 780, "minWidth": 900, "minHeight": 650 }], "security": { "csp": null } },
+  "bundle": { "active": true, "targets": "all", "icon": ["icons/icon.ico"] }
+}

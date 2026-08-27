@@ -1,0 +1,14 @@
+{
+  "name": "starbound-item-pose-editor",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "cargo tauri dev --manifest-path src-tauri/Cargo.toml",
+    "build": "cargo tauri build --manifest-path src-tauri/Cargo.toml"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0"
+  }
+}
+

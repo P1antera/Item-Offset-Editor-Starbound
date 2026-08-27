@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Starbound Item Pose Editor</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Starbound Item Pose Editor</h1>
+      <span id="status">正在初始化…</span>
+      <label class="language"><span data-i18n="language">语言</span><select id="language"><option value="zh-CN">简体中文</option><option value="en">English</option></select></label>
+    </header>
+    <main>
+      <section class="controls">
+        <div class="row"><label><span data-i18n="root">Starbound 根目录</span><input id="root" /></label><button id="browseRoot" data-i18n="browse">浏览…</button></div>
+        <div class="row"><label><span data-i18n="activeitem">ActiveItem 文件</span><input id="itemPath" data-i18n-placeholder="itemPlaceholder" placeholder="C:\\...\\weapon.activeitem" /></label><button id="browseItem" data-i18n="browse">浏览…</button></div>
+        <label><span data-i18n="character">角色</span><select id="species"><option value="human" data-i18n="humanTemplate">人类模板</option><option value="avian" data-i18n="avian">鸟人（Avian）</option><option value="apex" data-i18n="apex">猿人（Apex）</option><option value="floran" data-i18n="floran">叶族（Floran）</option><option value="glitch" data-i18n="glitch">机器人（Glitch）</option><option value="hylotl" data-i18n="hylotl">鱼人（Hylotl）</option></select></label>
+        <label><span data-i18n="stance">Stance</span><select id="stance"></select></label>
+        <hr />
+        <div class="grid">
+          <label><span data-i18n="baseOffsetX">baseOffset X（0.125 = 1 游戏像素）</span><input id="baseOffsetX" type="number" step="0.125" /></label>
+          <label><span data-i18n="baseOffsetY">baseOffset Y（0.125 = 1 游戏像素）</span><input id="baseOffsetY" type="number" step="0.125" /></label>
+          <label><span data-i18n="weaponOffsetX">weaponOffset X（0.125 = 1 游戏像素）</span><input id="offsetX" type="number" step="0.125" /></label>
+          <label><span data-i18n="weaponOffsetY">weaponOffset Y（0.125 = 1 游戏像素）</span><input id="offsetY" type="number" step="0.125" /></label>
+          <label><span data-i18n="weaponRotation">weaponRotation°</span><input id="weaponRotation" type="number" step="1" /></label>
+          <label><span data-i18n="armRotation">armRotation°</span><input id="armRotation" type="number" step="1" /></label>
+          <label><span data-i18n="frontArmFrame">前臂帧</span><input id="frontArmFrame" placeholder="swim.3" /></label>
+          <label><span data-i18n="backArmFrame">后臂帧</span><input id="backArmFrame" placeholder="run.5" /></label>
+        </div>
+        <label class="check"><input id="showGuides" type="checkbox" checked /><span data-i18n="showGuides">显示锚点与瞄准线</span></label>
+        <p id="baseInfo" class="hint" data-i18n="baseLoading">贴图基础偏移：读取中…</p>
+        <div class="row buttons"><button id="flip" data-i18n="flip">切换左右朝向</button></div>
+      </section>
+      <section class="preview"><canvas id="scene" width="760" height="620" data-i18n-aria="canvasLabel" aria-label="持物姿势预览"></canvas><p data-i18n="canvasHelp">在画布任意处拖动可修改瞄准角。蓝线为瞄准方向，橙点为手部锚点。</p></section>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

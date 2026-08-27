@@ -67,6 +67,12 @@ fn base64_encode(data: &[u8]) -> String { const T:&[u8;64]=b"ABCDEFGHIJKLMNOPQRS
 fn first_existing(paths: Vec<PathBuf>) -> Option<PathBuf> { paths.into_iter().find(|p|p.is_file()) }
 fn read_frames(path: &Path) -> Option<Value> { fs::read_to_string(path).ok().and_then(|raw| parse_jsonc(&raw).ok()) }
 fn sprite_layer(image: &Path, frames: Option<&Path>) -> Option<Value> { data_url(image).map(|image| json!({"image": image, "frames": frames.and_then(read_frames)})) }
+// Mod weapons often use <image-name>.frames instead of default.frames. The image-specific table
+// has priority because it describes the exact spritesheet selected by animationParts.
+fn frames_for_image(image: &Path, default_frames: &Path) -> Option<PathBuf> {
+  let sibling=image.with_extension("frames");
+  if sibling.is_file() { Some(sibling) } else if default_frames.is_file() { Some(default_frames.to_path_buf()) } else { None }
+}
 fn image_path(root: &Path, active: &Path, name: &str) -> PathBuf {
   let clean=name.split('?').next().unwrap_or(name);
   if !clean.starts_with('/') { return active.parent().unwrap_or(Path::new(".")).join(clean); }
@@ -98,7 +104,9 @@ fn preview_assets(root: String, activeitem_path: String, species: String) -> Map
     .or_else(||configured.and_then(|p|p.iter().find_map(|(key,v)|v.as_str().filter(|s|!s.is_empty()).map(|name|(key.clone(),name.to_string())))));
   let item=direct_part.as_ref().map(|(_,name)|image_path(&root,&active,name)).filter(|path|path.is_file()).or_else(||first_existing(vec![active.parent().unwrap_or(Path::new(".")).join("body.png"),active.parent().unwrap_or(Path::new(".")).join("gun.png")]));
   if let Some(path)=item {
-    if let Some(layer)=sprite_layer(&path,Some(&active.parent().unwrap_or(Path::new(".")).join("default.frames"))){result.insert("item".into(),layer);}
+    let default_frames=active.parent().unwrap_or(Path::new(".")).join("default.frames");
+    let item_frames=frames_for_image(&path,&default_frames);
+    if let Some(layer)=sprite_layer(&path,item_frames.as_deref()){result.insert("item".into(),layer);}
     let part_name=direct_part.as_ref().map(|(key,_)|key.as_str()).unwrap_or("gun");
     let animation=active_json.get("animation").and_then(Value::as_str).and_then(|name|read_frames(&image_path(&root,&active,name))).unwrap_or(Value::Null);
     let animation_offset=animation.pointer(&format!("/animatedParts/parts/{part_name}/properties/offset")).cloned();
@@ -167,5 +175,13 @@ mod tests {
       let raw=fs::read_to_string(root.join(path)).expect("reported Mod file should exist");
       parse_jsonc(&raw).unwrap_or_else(|error| panic!("{path} should parse: {error}"));
     }
+  }
+
+  #[test]
+  fn selects_rf6s_image_specific_frame_table() {
+    let root=Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let image=root.join("OpenStarbound/mods/at_ext/items/active/weapons/at_ext_rf6/at_ext_rf6.png");
+    let frames=super::frames_for_image(&image,&image.with_file_name("default.frames"));
+    assert_eq!(frames,Some(image.with_extension("frames")));
   }
 }

@@ -1,18 +1,20 @@
 # Starbound Item Pose Editor
 
-一个用于在游戏外预览 Starbound ActiveItem 持物姿势并快速调整 Offset 的 Windows 小工具。它读取游戏与 Mod 的资源，不会修改 `assets.pak`；当前参数调整仅用于实时预览，不会写回 `.activeitem` 文件。
+An early Windows utility for previewing Starbound ActiveItem holding poses and quickly tuning offsets outside the game. It reads game and mod resources without modifying `assets.pak`; all parameter changes are preview-only for now and are never written back to an `.activeitem` file.
 
-我使用 Codex 编写了这个小工具，以减少反复进入游戏测试物品 Offset 的时间。项目仍处于早期阶段，后续可能会根据我的需求继续增加功能和渲染兼容性。
+![Starbound Item Pose Editor preview](assets/preview.png)
 
-## 使用
+I built this small tool with Codex to avoid repeatedly launching the game just to test an item's offset. The project is still in an early stage, and I may add more features and rendering compatibility as my own needs evolve.
 
-项目根目录附带 `StarboundItemPoseEditor.exe`。将整个文件夹放在 Starbound 根目录下可自动发现资源；也可以将它移到别处，并在界面中选择 Starbound 根目录。双击 EXE 即可使用，不需要安装 Rust、Node.js 或重新构建。
+## Usage
 
-目前支持固定模板与随机模板枪械的静态预览、手臂瞄准、左右朝向、基础种族模板，以及带注释或字符串原始换行的 Mod ActiveItem 文件。
+`StarboundItemPoseEditor.exe` is included in the project root. Place the full folder inside your Starbound installation to let the app discover resources automatically, or choose the Starbound root directory in the interface after moving it elsewhere. Double-click the EXE to run it—Rust, Node.js, and a local build are not required.
 
-## 开发构建
+The current preview supports fixed-template and random-template guns, arm aiming, left/right facing, base race templates, and mod ActiveItem files containing comments or raw newlines inside strings.
 
-需要 Rust（MSVC 工具链）、Node.js 20+，以及 Visual Studio 2022 Build Tools 的 **Desktop development with C++** 工作负载。在此目录运行：
+## Development Build
+
+Install Rust with the MSVC toolchain, Node.js 20+, and the **Desktop development with C++** workload from Visual Studio 2022 Build Tools. Then run the following in this directory:
 
 ```powershell
 npm install
